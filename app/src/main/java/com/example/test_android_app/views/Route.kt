@@ -71,8 +71,8 @@ sealed class Route(
                         title = "Photos List",
                         navController = navController,
                         viewModel = PhotoViewModel(PhotoService(PhotoRepository()))
-                    ) { viewModel ->
-                        PhotosList(viewModel = viewModel)
+                    ) { viewModel, _, snackbarHostState, renderActionsComposable ->
+                        PhotosList(viewModel = viewModel,snackbarHostState, renderActionsComposable)
                     }
                 })
 
@@ -82,7 +82,16 @@ sealed class Route(
                 title = ScreenTypes.PhotoDetails?.name,
                 icon = null,
                 isDetails = true,
-                content = { _, _ -> ScreenTypes.PhotoDetails?.name?.let { Text(text = it) } }
+                content = { _, navController ->
+                    BasePageWrapper(
+                        title = "Photo Details",
+                        navController = navController,
+                        hasNavigationIcon= false,
+                        viewModel = PhotoViewModel(PhotoService(PhotoRepository()))
+                    ) { viewModel, _, _, _ ->
+                        ScreenTypes.PhotoDetails?.name?.let { Text(text = it) }
+                    }
+                }
             )
 
         data object ProductsList :
@@ -96,7 +105,7 @@ sealed class Route(
                         title = "Product List",
                         navController = navController,
                         viewModel = PhotoViewModel(PhotoService(PhotoRepository()))
-                    ) { viewModel ->
+                    ) { viewModel, _, _, renderActionsComposable ->
                         ScreenTypes.ProductsList?.name?.let { Text(text = it) }
                     }
                 }
@@ -108,7 +117,16 @@ sealed class Route(
                 title = ScreenTypes.ProductDetails?.name,
                 icon = null,
                 isDetails = true,
-                content = { _, _ -> ScreenTypes.ProductDetails?.name?.let { Text(text = it) } }
+                content = { _, navController ->
+                    BasePageWrapper(
+                        title = "Product Details",
+                        navController = navController,
+                        hasNavigationIcon= false,
+                        viewModel = PhotoViewModel(PhotoService(PhotoRepository()))
+                    ) { viewModel, _, _, _ ->
+                        ScreenTypes.ProductDetails?.name?.let { Text(text = it) }
+                    }
+                }
             )
 
         data object Category :
@@ -122,7 +140,7 @@ sealed class Route(
                         title = "Category",
                         navController = navController,
                         viewModel = PhotoViewModel(PhotoService(PhotoRepository()))
-                    ) { viewModel ->
+                    ) { viewModel, _, _, _ ->
                         ScreenTypes.Category?.name?.let { Text(text = it) }
                     }
                 }
@@ -139,7 +157,7 @@ sealed class Route(
                         title = "Orders",
                         navController = navController,
                         viewModel = PhotoViewModel(PhotoService(PhotoRepository()))
-                    ) { viewModel ->
+                    ) { viewModel, _, _, _ ->
                         ScreenTypes.Orders?.name?.let { Text(text = it) }
                     }
                 }
@@ -156,7 +174,7 @@ sealed class Route(
                         title = "Locations",
                         navController = navController,
                         viewModel = PhotoViewModel(PhotoService(PhotoRepository()))
-                    ) { viewModel ->
+                    ) { viewModel, _, _, _ ->
                         ScreenTypes.Locations?.name?.let { Text(text = it) }
                     }
                 }
@@ -173,7 +191,7 @@ sealed class Route(
                         title = "Account",
                         navController = navController,
                         viewModel = PhotoViewModel(PhotoService(PhotoRepository()))
-                    ) { viewModel ->
+                    ) { viewModel, _, _, _ ->
                         ScreenTypes.Account?.name?.let { Text(text = it) }
                     }
                 }
@@ -190,7 +208,7 @@ sealed class Route(
                         title = "Settings",
                         navController = navController,
                         viewModel = PhotoViewModel(PhotoService(PhotoRepository()))
-                    ) { viewModel ->
+                    ) { viewModel, _, _, _ ->
                         ScreenTypes.Settings?.name?.let { Text(text = it) }
                     }
                 }
@@ -207,7 +225,7 @@ sealed class Route(
                         title = "About",
                         navController = navController,
                         viewModel = PhotoViewModel(PhotoService(PhotoRepository()))
-                    ) { viewModel ->
+                    ) { viewModel, _, _, _ ->
                         ScreenTypes.About?.name?.let { Text(text = it) }
                     }
                 }
