@@ -3,6 +3,7 @@ package com.example.test_android_app.views
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
@@ -87,109 +88,161 @@ inline fun <reified T> BasePageWrapper(
         actionsComposableReceived++
     }
 
-    ModalNavigationDrawer(
-        drawerState = drawerState,
-        drawerContent = {
-            ModalDrawerSheet(
-                modifier = Modifier.background(Color.White),
-                drawerShape = RoundedCornerShape(0.dp)
+    val renderModalDrawerContent= @androidx.compose.runtime.Composable {
+        ModalDrawerSheet(modifier = Modifier.background(Color.White), drawerShape = RoundedCornerShape(0.dp)) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp)
+                    .background(MaterialTheme.colorScheme.primaryContainer),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Column(
+                Row(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp)
-                        .background(MaterialTheme.colorScheme.primaryContainer),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                        .fillMaxHeight()
+                        .width(200.dp),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .width(200.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        AsyncImage(
-                            model = "https://cpmr-islands.org/wp-content/uploads/sites/4/2019/07/Test-Logo-Small-Black-transparent-1.png",
-                            contentDescription = "test logo",
-                            modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer)
-                        )
-                    }
+                    AsyncImage(
+                        model = "https://cpmr-islands.org/wp-content/uploads/sites/4/2019/07/Test-Logo-Small-Black-transparent-1.png",
+                        contentDescription = "test logo",
+                        modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer)
+                    )
                 }
-                Column(
-                    modifier = Modifier
-                        .height(400.dp)
-                        .absolutePadding(top = 10.dp, left = 10.dp)
-                ) {
-                    LazyColumn {
-                        items(Route.Screens.size) {
-                            val route = Route.Screens[it]
-                            if (route.isDetails == false) {
-                                NavigationDrawerItem(
-                                    label = { Text(text = route.title!!) },
-                                    selected = false,
-                                    icon = {
-                                        Image(
-                                            imageVector = route.icon!!,
-                                            contentDescription = route.title
-                                        )
-                                    },
-                                    onClick = {
-                                        scope.launch {
-                                            drawerState.apply {
-                                                if (isClosed) open() else close()
-                                            }
+            }
+            Column(
+                modifier = Modifier
+                    .height(400.dp)
+                    .absolutePadding(top = 10.dp, left = 10.dp)
+            ) {
+                LazyColumn {
+                    items(Route.Screens.size) {
+                        val route = Route.Screens[it]
+                        if (route.isDetails == false) {
+                            NavigationDrawerItem(
+                                label = { Text(text = route.title!!) },
+                                selected = false,
+                                icon = {
+                                    Image(
+                                        imageVector = route.icon!!,
+                                        contentDescription = route.title
+                                    )
+                                },
+                                onClick = {
+                                    scope.launch {
+                                        drawerState.apply {
+                                            if (isClosed) open() else close()
                                         }
-                                        navController?.navigate(route.routeName?.name!!)
-                                    })
-                            }
+                                    }
+                                    navController?.navigate(route.routeName?.name!!)
+                                })
                         }
                     }
                 }
-                ElevatedButton(
-                    onClick = { /*TODO*/ },
+            }
+            ElevatedButton(
+                onClick = { /*TODO*/ },
+                modifier = Modifier
+                    .height(50.dp)
+                    .width(150.dp)
+                    .padding(start = 20.dp, top = 10.dp),
+                shape = RoundedCornerShape(30.dp),
+                colors = ButtonDefaults.elevatedButtonColors(MaterialTheme.colorScheme.primary),
+                elevation = ButtonDefaults.elevatedButtonElevation(10.dp),
+                contentPadding = PaddingValues(1.dp)
+            ) {
+                Text(text = "Login", color = Color.White)
+            }
+        }
+    }
+
+    val renderTopBarContent= @androidx.compose.runtime.Composable {
+        TopAppBar(
+            actions = {
+                if (actionsComposableReceived > 0 && actionsComposable != null) {
+                    actionsComposable!!()
+                }
+            },
+            navigationIcon = {
+                if (hasNavigationIcon)
+                    IconButton(onClick = {
+                        scope.launch {
+                            drawerState.apply {
+                                if (isClosed) open() else close()
+                            }
+                        }
+                    }) {
+                        Icon(
+                            imageVector = Icons.Rounded.Menu,
+                            contentDescription = "Menu",
+                        )
+                    }
+            },
+            title = { Text(text = title!!) },
+            colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                containerColor = MaterialTheme.colorScheme.primaryContainer
+            ),
+        )
+    }
+
+    val renderLoader: @Composable() (ColumnScope.()->Unit)= @androidx.compose.runtime.Composable {
+        if (isLoading.value) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .width(200.dp)
+                    .fillMaxHeight()
+                    .align(Alignment.CenterHorizontally)
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
-                        .height(50.dp)
-                        .width(150.dp)
-                        .padding(start = 20.dp, top = 10.dp),
-                    shape = RoundedCornerShape(30.dp),
-                    colors = ButtonDefaults.elevatedButtonColors(MaterialTheme.colorScheme.primary),
-                    elevation = ButtonDefaults.elevatedButtonElevation(10.dp),
-                    contentPadding = PaddingValues(1.dp)
+                        .width(200.dp)
+                        .fillMaxHeight()
+                        .align(Alignment.CenterHorizontally)
                 ) {
-                    Text(text = "Login", color = Color.White)
+                    CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterVertically))
                 }
             }
+        }
+    }
+
+    val renderError= @androidx.compose.runtime.Composable {
+        if (isError.value) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight()
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight()
+                ) {
+                    Text(
+                        text = "$error.value",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 14.sp,
+                        color = Color.Red
+                    )
+                }
+            }
+        }
+    }
+
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            renderModalDrawerContent()
         }) {
         Scaffold(
             snackbarHost = {
                 SnackbarHost(hostState = snackbarHostState)
             },
             topBar = {
-                TopAppBar(
-                    actions = {
-                        if (actionsComposableReceived > 0 && actionsComposable != null) {
-                            actionsComposable!!()
-                        }
-                    },
-                    navigationIcon = {
-                        if (hasNavigationIcon)
-                            IconButton(onClick = {
-                                scope.launch {
-                                    drawerState.apply {
-                                        if (isClosed) open() else close()
-                                    }
-                                }
-                            }) {
-                                Icon(
-                                    imageVector = Icons.Rounded.Menu,
-                                    contentDescription = "Menu",
-                                )
-                            }
-                    },
-                    title = { Text(text = title!!) },
-                    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer
-                    ),
-                )
+                renderTopBarContent()
             },
         ) { contentPadding ->
             Column(
@@ -200,47 +253,8 @@ inline fun <reified T> BasePageWrapper(
                     .fillMaxWidth()
                     .fillMaxHeight()
             ) {
-                if (isLoading.value) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier
-                            .width(200.dp)
-                            .fillMaxHeight()
-                            .align(Alignment.CenterHorizontally)
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier
-                                .width(200.dp)
-                                .fillMaxHeight()
-                                .align(Alignment.CenterHorizontally)
-                        ) {
-                            CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterVertically))
-                        }
-                    }
-                }
-                if (isError.value) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .fillMaxHeight()
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .fillMaxHeight()
-                        ) {
-                            Text(
-                                text = "$error.value",
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 14.sp,
-                                color = Color.Red
-                            )
-                        }
-                    }
-                }
+                renderLoader()
+                renderError()
                 content(viewModel, navController!!, snackbarHostState, renderActionsComposable)
             }
         }
