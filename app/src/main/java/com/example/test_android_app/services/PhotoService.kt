@@ -19,11 +19,9 @@ class PhotoService(private val repository: PhotoRepository?): BaseService() {
                 val resp = repository!!.getPhotos().await()
                 setState(resp.isLoading, resp.isError, resp.error)
                 photos.value = resp.result
-
             } catch (e: Exception) {
                 setState(_isLoading = false, _isError = true, _error = e.message)
                 photos.value = null
-
             }
         }
     }
@@ -39,11 +37,9 @@ class PhotoService(private val repository: PhotoRepository?): BaseService() {
                 val resp = repository!!.getPhotoById(id).await()
                 setState(resp.isLoading, resp.isError, resp.error!!)
                 photos.value = resp.result
-
             } catch (e: Exception) {
                 setState(_isLoading = false, _isError = true, _error = e.message!!)
                 photos.value = null
-
             }
         }
     }

@@ -52,6 +52,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.test_android_app.viewModels.BaseViewModel
+import com.example.test_android_app.viewModels.CartViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -88,8 +89,11 @@ inline fun <reified T> BasePageWrapper(
         actionsComposableReceived++
     }
 
-    val renderModalDrawerContent= @androidx.compose.runtime.Composable {
-        ModalDrawerSheet(modifier = Modifier.background(Color.White), drawerShape = RoundedCornerShape(0.dp)) {
+    val renderModalDrawerContent = @Composable {
+        ModalDrawerSheet(
+            modifier = Modifier.background(Color.White),
+            drawerShape = RoundedCornerShape(0.dp)
+        ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -156,12 +160,13 @@ inline fun <reified T> BasePageWrapper(
         }
     }
 
-    val renderTopBarContent= @androidx.compose.runtime.Composable {
+    val renderTopBarContent = @Composable {
         TopAppBar(
             actions = {
                 if (actionsComposableReceived > 0 && actionsComposable != null) {
                     actionsComposable!!()
                 }
+                CartWidget(viewModel = CartViewModel(), snackbarHostState = snackbarHostState)
             },
             navigationIcon = {
                 if (hasNavigationIcon)
@@ -185,7 +190,7 @@ inline fun <reified T> BasePageWrapper(
         )
     }
 
-    val renderLoader: @Composable() (ColumnScope.()->Unit)= @androidx.compose.runtime.Composable {
+    val renderLoader: @Composable() (ColumnScope.() -> Unit) = @Composable {
         if (isLoading.value) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -207,7 +212,7 @@ inline fun <reified T> BasePageWrapper(
         }
     }
 
-    val renderError= @androidx.compose.runtime.Composable {
+    val renderError = @Composable {
         if (isError.value) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,

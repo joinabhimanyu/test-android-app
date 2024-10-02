@@ -41,6 +41,7 @@ fun PhotosList(
     val photos = viewModel.photos.observeAsState(emptyList())
     val scope= rememberCoroutineScope()
 
+    /*
     LaunchedEffect(key1 = Unit) {
         renderActionsComposable {
             IconButton(onClick = {
@@ -55,6 +56,7 @@ fun PhotosList(
             }
         }
     }
+    */
 
     LazyColumn {
         items(photos.value.size) { index ->
