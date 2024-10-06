@@ -58,13 +58,117 @@ class CartRepository(context: Context) {
         return response
     }
 
-    suspend fun insertItem(item: Cart): CompletableDeferred<ApiResponse<Cart>> {
-        val response = CompletableDeferred<ApiResponse<Cart>>()
+    suspend fun insertItem(item: Cart): CompletableDeferred<ApiResponse<String>> {
+        val response = CompletableDeferred<ApiResponse<String>>()
         try {
             db.cartDao().insertItem(item).also {
                 response.complete(
                     ApiResponse(
-                        null,
+                        "Item inserted successfully",
+                        isLoading = false,
+                        isError = false,
+                        error = null
+                    )
+                )
+            }
+        } catch (e: Exception) {
+            response.complete(
+                ApiResponse(
+                    null,
+                    isLoading = false,
+                    isError = true,
+                    error = e.message
+                )
+            )
+        }
+        return response
+    }
+
+    suspend fun insertItems(items: List<Cart>): CompletableDeferred<ApiResponse<String>> {
+        val response = CompletableDeferred<ApiResponse<String>>()
+        try {
+            db.cartDao().insertItems(items).also {
+                response.complete(
+                    ApiResponse(
+                        "Items inserted successfully",
+                        isLoading = false,
+                        isError = false,
+                        error = null
+                    )
+                )
+            }
+        } catch (e: Exception) {
+            response.complete(
+                ApiResponse(
+                    null,
+                    isLoading = false,
+                    isError = true,
+                    error = e.message
+                )
+            )
+        }
+        return response
+    }
+
+    suspend fun updateItem(item: Cart): CompletableDeferred<ApiResponse<String>> {
+        val response = CompletableDeferred<ApiResponse<String>>()
+        try {
+            db.cartDao().updateItem(item).also {
+                response.complete(
+                    ApiResponse(
+                        "Item updated successfully",
+                        isLoading = false,
+                        isError = false,
+                        error = null
+                    )
+                )
+            }
+        } catch (e: Exception) {
+            response.complete(
+                ApiResponse(
+                    null,
+                    isLoading = false,
+                    isError = true,
+                    error = e.message
+                )
+            )
+        }
+        return response
+    }
+
+    suspend fun updateItems(items: List<Cart>): CompletableDeferred<ApiResponse<String>> {
+        val response = CompletableDeferred<ApiResponse<String>>()
+        try {
+            db.cartDao().updateItems(items).also {
+                response.complete(
+                    ApiResponse(
+                        "Items updated successfully",
+                        isLoading = false,
+                        isError = false,
+                        error = null
+                    )
+                )
+            }
+        } catch (e: Exception) {
+            response.complete(
+                ApiResponse(
+                    null,
+                    isLoading = false,
+                    isError = true,
+                    error = e.message
+                )
+            )
+        }
+        return response
+    }
+
+    suspend fun deleteItem(item: Cart): CompletableDeferred<ApiResponse<String>> {
+        val response = CompletableDeferred<ApiResponse<String>>()
+        try {
+            db.cartDao().deleteItem(item).also {
+                response.complete(
+                    ApiResponse(
+                        "Item deleted successfully",
                         isLoading = false,
                         isError = false,
                         error = null

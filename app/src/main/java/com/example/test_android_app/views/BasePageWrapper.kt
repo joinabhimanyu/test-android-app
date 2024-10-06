@@ -46,11 +46,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
+import com.example.test_android_app.repositories.CartRepository
+import com.example.test_android_app.services.CartService
 import com.example.test_android_app.viewModels.BaseViewModel
 import com.example.test_android_app.viewModels.CartViewModel
 import kotlinx.coroutines.launch
@@ -166,7 +169,7 @@ inline fun <reified T> BasePageWrapper(
                 if (actionsComposableReceived > 0 && actionsComposable != null) {
                     actionsComposable!!()
                 }
-                CartWidget(viewModel = CartViewModel(), snackbarHostState = snackbarHostState)
+                CartWidget(viewModel = CartViewModel(service = CartService(repository = CartRepository(context = LocalContext.current))), snackbarHostState = snackbarHostState)
             },
             navigationIcon = {
                 if (hasNavigationIcon)

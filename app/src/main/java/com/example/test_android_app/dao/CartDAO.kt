@@ -20,8 +20,14 @@ interface CartDAO {
     @Insert(entity = Cart::class)
     suspend fun insertItem(item: Cart)
 
+    @Insert(entity = Cart::class)
+    suspend fun insertItems(items: List<Cart>)
+
     @Update(entity = Cart::class)
     suspend fun updateItem(item: Cart)
+
+    @Update(entity = Cart::class)
+    suspend fun updateItems(items: List<Cart>)
 
     @Delete(entity = Cart::class)
     suspend fun deleteItem(item: Cart)

@@ -47,4 +47,52 @@ class CartService(private val repository: CartRepository) : BaseService() {
             }
         }
     }
+
+    suspend fun insertItems(items: List<Cart>) = coroutineScope {
+        launch {
+            try {
+                setState(_isLoading = true, _isError = false, _error = null)
+                val resp = repository.insertItems(items).await()
+                setState(resp.isLoading, resp.isError, resp.error)
+            } catch (e: Exception) {
+                setState(_isLoading = false, _isError = true, _error = e.message)
+            }
+        }
+    }
+
+    suspend fun updateItem(item: Cart) = coroutineScope {
+        launch {
+            try {
+                setState(_isLoading = true, _isError = false, _error = null)
+                val resp = repository.updateItem(item).await()
+                setState(resp.isLoading, resp.isError, resp.error)
+            } catch (e: Exception) {
+                setState(_isLoading = false, _isError = true, _error = e.message)
+            }
+        }
+    }
+
+    suspend fun updateItems(items: List<Cart>) = coroutineScope {
+        launch {
+            try {
+                setState(_isLoading = true, _isError = false, _error = null)
+                val resp = repository.updateItems(items).await()
+                setState(resp.isLoading, resp.isError, resp.error)
+            } catch (e: Exception) {
+                setState(_isLoading = false, _isError = true, _error = e.message)
+            }
+        }
+    }
+
+    suspend fun deleteItem(item: Cart) = coroutineScope {
+        launch {
+            try {
+                setState(_isLoading = true, _isError = false, _error = null)
+                val resp = repository.deleteItem(item).await()
+                setState(resp.isLoading, resp.isError, resp.error)
+            } catch (e: Exception) {
+                setState(_isLoading = false, _isError = true, _error = e.message)
+            }
+        }
+    }
 }

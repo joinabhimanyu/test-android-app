@@ -38,6 +38,34 @@ class CartViewModel(private val service: CartService) : BaseViewModel() {
         }
     }
 
+    fun addItemsToCart(items: List<Cart>) {
+        viewModelScope.launch {
+            service.insertItems(items)
+            service.getAllItems(_cartItems)
+        }
+    }
+
+    fun updateItemToCart(item: Cart) {
+        viewModelScope.launch {
+            service.updateItem(item)
+            service.getAllItems(_cartItems)
+        }
+    }
+
+    fun updateItemsToCart(items: List<Cart>) {
+        viewModelScope.launch {
+            service.updateItems(items)
+            service.getAllItems(_cartItems)
+        }
+    }
+
+    fun removeItemFromCart(item: Cart) {
+        viewModelScope.launch {
+            service.deleteItem(item)
+            service.getAllItems(_cartItems)
+        }
+    }
+
 //    fun addItemsToCart(items: List<CartModel>) {
 //        viewModelScope.launch {
 //            cartItems.value = cartItems.value!!.toMutableList().plus(items)
